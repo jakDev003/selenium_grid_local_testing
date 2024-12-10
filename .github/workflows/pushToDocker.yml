@@ -22,9 +22,10 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_PW }}
 
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        push: true
-        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/my-image:latest
+    - name: Build Docker image
+      run: docker-compose build
+
+    - name: Push Docker image
+      run: |
+        echo ${{ secrets.DOCKER_HUB_PW }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+        docker-compose push
